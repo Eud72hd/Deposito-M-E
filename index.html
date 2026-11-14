@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>depositoM&E — Depósito de Bebidas & PDV</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --surface: #131b2e;
+      --surface-light: #1e293b;
+      --primary: #fbbf24;
+      --primary-hover: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #2a364f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 75px; /* Espaço para a barra inferior */
+    }
+
+    /* Topo do App */
+    .top-header {
+      background-color: var(--surface);
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .brand-icon {
+      background: var(--primary);
+      color: #0b0f19;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-status {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge-mp {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .badge-mp.connected {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .icon-btn {
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Conteúdo Principal */
+    main {
+      flex: 1;
+      padding: 1rem;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Banner Destaque (Coca-Cola 2L) */
+    .hero-banner {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      background: var(--primary);
+      color: #0b0f19;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .hero-link {
+      color: #60a5fa;
+      font-size: 0.8rem;
+      text-decoration: underline;
+      float: right;
+      cursor: pointer;
+    }
+
+    .hero-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.3rem;
+      color: var(--text);
+    }
+
+    .hero-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero-add {
+      flex: 1;
+      background: var(--primary);
+      color: #0b0f19;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-hero-config {
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Seção Top Estoque */
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title a {
+      font-size: 0.85rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .catalog-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 150px;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .catalog-card:hover {
+      border-color: var(--primary);
+    }
+
+    .catalog-card-icon {
+      align-self: flex-end;
+      background: var(--surface-light);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .catalog-card-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      line-height: 1.2;
+    }
+
+    .catalog-card-stock {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Painéis das Abas (PDV, Estoque, Vendas, Config) */
+    .panel-view {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-summary {
+      background: var(--surface-light);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.15rem;
+      font-weight: bold;
+      border-top: 1px solid var(--border);
+      padding-top: 0.5rem;
+      margin-top: 0.5rem;
+      color: var(--primary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.7rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+
+    th {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .config-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.7rem;
+      border-radius: 8px;
+      margin-bottom: 0.85rem;
+      font-size: 0.9rem;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: #0b0f19;
+      border: none;
+      padding: 0.75rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* BARRA DE NAVEGAÇÃO INFERIOR (Estilo Exato da Foto) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background: #0f172a;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+      padding: 0 0.5rem;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      flex: 1;
+      height: 100%;
+      transition: 0.15s;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item-center {
+      position: relative;
+      top: -14px;
+    }
+
+    .nav-center-btn {
+      width: 52px;
+      height: 52px;
+      background: var(--primary);
+      border: 4px solid #0f172a;
+      border-radius: 50%;
+      color: #0b0f19;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+      cursor: pointer;
+    }
+
+    .nav-center-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    /* Modal Perfil Google (Ao clicar no botão de perfil embaixo) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 1rem;
+    }
+
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    }
+
+    .profile-avatar-lg {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #0b0f19;
+      font-size: 1.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      overflow: hidden;
+      border: 3px solid var(--primary);
+    }
+
+    .profile-avatar-lg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Modal Comprovante / Maquineta */
+    .receipt-paper {
+      background: #fefce8;
+      color: #1e293b;
+      width: 100%;
+      max-width: 340px;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPO DO APP -->
+  <header class="top-header">
+    <div class="brand-area">
+      <div class="brand-icon">M</div>
+      <div>
+        <div class="brand-title">depositoM&E</div>
+        <div class="brand-status"><span class="dot"></span> ONLINE</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span id="mpBadge" class="badge-mp">MP Off</span>
+      <button class="icon-btn" onclick="switchView('vendas')">🔔</button>
+      <button class="icon-btn" onclick="switchView('config')">🔍</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- VISÃO PRINCIPAL (HOME / DESTAQUE) -->
+    <div id="view-home">
+      <!-- BANNER DESTAQUE -->
+      <div class="hero-banner">
+        <span class="hero-tag">Top Depósito</span>
+        <span class="hero-link" onclick="switchView('config')">Vincular Maquininha MP</span>
+        <div style="clear: both;"></div>
+        <h2 class="hero-title" id="heroName">Coca-Cola 2L Pet</h2>
+        <p class="hero-desc">Refrigerantes, cervejas em litrão, latão, longneck, destilados e gelo com integração automática.</p>
+        <div class="hero-actions">
+          <button class="btn-hero-add" onclick="adicionarHeroAoCaixa()">
+            <span>+</span> Adicionar ao Caixa • <span id="heroPrice">R$ 10,50</span>
+          </button>
+          <button class="btn-hero-config" onclick="switchView('config')">⚙️ Configurar</button>
+        </div>
+      </div>
+
+      <!-- TOP ESTOQUE -->
+      <div class="section-title">
+        <span>🔥 Top Estoque</span>
+        <a href="#" onclick="switchView('estoque')">Ver catálogo &gt;</a>
+      </div>
+
+      <div class="catalog-grid" id="catalogGrid"></div>
+    </div>
+
+    <!-- VISÃO CAIXA / PDV -->
+    <div id="view-pdv" class="panel-view hidden">
+      <h2>Caixa & PDV</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Gerencie o carrinho e finalize cobranças na Point ou Pix.</p>
+      
+      <div style="margin-bottom: 1rem;">
+        <input type="text" id="searchInput" class="config-input" placeholder="Buscar produto..." oninput="renderCatalog()" />
+      </div>
+
+      <div id="cartContainer">
+        <p style="color: var(--text-muted); text-align: center; padding: 1.5rem;">Nenhum item no carrinho.</p>
+      </div>
+
+      <div class="cart-summary">
+        <div class="cart-row">
+          <span>Forma de Pagamento:</span>
+          <select id="paymentMethod" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.3rem; border-radius: 6px;">
+            <option value="Point Crédito">💳 Mercado Pago Point (Crédito)</option>
+            <option value="Point Débito">💳 Mercado Pago Point (Débito)</option>
+            <option value="Pix">💠 Pix Instantâneo</option>
+            <option value="Dinheiro">💵 Dinheiro</option>
+          </select>
+        </div>
+        <div class="cart-total-row">
+          <span>Total:</span>
+          <span id="cartTotalText">R$ 0,00</span>
+        </div>
+        <button class="btn-action" style="width: 100%; margin-top: 1rem;" onclick="processarCheckout()" id="checkoutBtn" disabled>
+          Cobrar na Maquininha & Gerar Recibo
+        </button>
+      </div>
+    </div>
+
+    <!-- VISÃO ESTOQUE -->
+    <div id="view-estoque" class="panel-view hidden">
+      <h2>Controle de Estoque</h2>
+      <form onsubmit="cadastrarProduto(event)" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <input type="text" id="novoNomeProd" class="config-input" placeholder="Nome do produto" required style="flex: 2; margin-bottom:0;" />
+        <input type="number" step="0.01" id="novoPrecoProd" class="config-input" placeholder="Preço (R$)" required style="flex: 1; margin-bottom:0;" />
+        <input type="number" id="novoEstqProd" class="config-input" placeholder="Qtd" required style="flex: 1; margin-bottom:0;" />
+        <button type="submit" class="btn-action">+ Cadastrar</button>
+      </form>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="stockTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- VISÃO VENDAS DO DIA -->
+    <div id="view-vendas" class="panel-view hidden">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Vendas Aprovadas Hoje</h2>
+        <span style="font-weight: bold; color: var(--primary);" id="faturamentoDia">R$ 0,00</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID / Hora</th>
+            <th>Pagamento</th>
+            <th>Total</th>
+            <th>Recibo</th>
+          </tr>
+        </thead>
+        <tbody id="salesTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- VISÃO CONFIGURAÇÕES (MAQUINETA & GOOGLE) -->
+    <div id="view-config" class="panel-view hidden">
+      <h2>⚙️ Configurar Maquineta & Google</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+        Vincule seu token do Mercado Pago para disparar cobranças direto para a Point e configure o Firebase para o login Google.
+      </p>
+
+      <label style="font-size: 0.8rem; font-weight: bold; color: var(--primary);">Access Token Mercado Pago (Produção)</label>
+      <input type="password" id="cfgToken" class="config-input" placeholder="APP_USR-..." />
+
+      <label style="font-size: 0.8rem; font-weight: bold; color: var(--primary);">ID da Maquineta Point (Device ID)</label>
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem;">
+        <input type="text" id="cfgDevice" class="config-input" placeholder="ex: PAX_A910..." style="margin-bottom:0;" />
+        <button type="button" class="btn-action" onclick="buscarDispositivosPoint()">Buscar</button>
+      </div>
+
+      <label style="font-size: 0.8rem; font-weight: bold; color: var(--primary);">Firebase API Key (Login Google)</label>
+      <input type="text" id="cfgApiKey" class="config-input" placeholder="AIzaSy..." />
+
+      <label style="font-size: 0.8rem; font-weight: bold; color: var(--primary);">Firebase Project ID</label>
+      <input type="text" id="cfgProject" class="config-input" placeholder="depositome-app" />
+
+      <button class="btn-action" style="width: 100%; margin-top: 0.5rem;" onclick="salvarConfiguracoesApp()">Salvar Configurações</button>
+      <span id="cfgMsg" style="display:block; margin-top:0.5rem; color:var(--primary); font-size:0.85rem;"></span>
+    </div>
+  </main>
+
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR (ESTILO EXATO DA FOTO) -->
+  <nav class="bottom-nav">
+    <button class="nav-item" id="nav-btn-home" onclick="switchView('home')">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Início</span>
+    </button>
+    <button class="nav-item" id="nav-btn-estoque" onclick="switchView('estoque')">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      <span>Estoque</span>
+    </button>
+    
+    <!-- BOTÃO CENTRAL DO CAIXA -->
+    <div class="nav-item-center">
+      <button class="nav-center-btn" onclick="switchView('pdv')">
+        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      </button>
+    </div>
+
+    <button class="nav-item" id="nav-btn-vendas" onclick="switchView('vendas')">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+      <span>Vendas</span>
+    </button>
+
+    <!-- BOTÃO DE PERFIL ABAIXO (ABRE A TELA "ESCOLHA UMA CONTA" DO GOOGLE) -->
+    <button class="nav-item" id="nav-btn-profile" onclick="abrirPerfilGoogle()">
+      <div id="footerAvatarCircle" style="width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: #0b0f19; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; justify-content: center; overflow: hidden;">i</div>
+      <span>Perfil</span>
+    </button>
+  </nav>
+
+  <!-- MODAL PERFIL & GOOGLE ACCOUNT CHOOSER -->
+  <div id="profileModal" class="modal-overlay hidden">
+    <div class="profile-card">
+      <div class="profile-avatar-lg" id="modalAvatar">?</div>
+      <h3 id="modalUserName" style="margin-bottom: 0.2rem;">Visitante</h3>
+      <p id="modalUserEmail" style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1.25rem;">Nenhuma conta conectada</p>
+      
+      <button class="btn-action" style="width: 100%; background: #fff; color: #1e293b; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" onclick="executarLoginGoogleReal()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Escolher Conta Google
+      </button>
+      <button class="btn-action" style="w
